@@ -4,17 +4,29 @@ import javax.xml.bind.DatatypeConverter;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 class Block  {
+
+    //Формирование даты
+    private String getToday() {
+        // Сегодняшняя дата в формате DD/MM/YYYY hh:mm
+        final Calendar calendar = Calendar.getInstance();
+
+        return (new StringBuilder().append(calendar.get(Calendar.DAY_OF_MONTH))
+                .append(".").append(calendar.get(Calendar.MONTH)+1).append(".")
+                .append(calendar.get(Calendar.YEAR)).append(" ").append(calendar.get(Calendar.HOUR_OF_DAY)).append(":").append(calendar.get(Calendar.MINUTE))).toString();
+    }
     private int index;
     private String previousHash;
-    private Date timestamp;
+    private String timestamp;
     private String data;
     private String hash;
 
     //Структура блока
-    Block(int index, String previousHash, Date timestamp, String data, String hash) {
+    Block(int index, String previousHash, String timestamp, String data, String hash) {
         this.index = index;
         this.previousHash = previousHash;
         this.timestamp = timestamp;
@@ -34,7 +46,7 @@ class Block  {
         return data;
     }
 
-    public Date getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
@@ -57,7 +69,7 @@ class Block  {
     };*/
 
     //Хеш блока
-    public String calculateHash (int index, String previousHash, Date timestamp, String data) throws NoSuchAlgorithmException {
+    public String calculateHash (int index, String previousHash, String timestamp, String data) throws NoSuchAlgorithmException {
         String str = index + previousHash + timestamp + data;
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         byte[] digest = md.digest(str.getBytes(StandardCharsets.UTF_8));
@@ -68,14 +80,14 @@ class Block  {
     //Генерация блока
     public Block generateNextBlock (Block block, String blockData) throws NoSuchAlgorithmException {
         int nextIndex = this.index + 1;
-        Date nextTimestamp = new Date();
+        String nextTimestamp = getToday();
         String nextHash = calculateHash(nextIndex, block.hash, nextTimestamp, blockData);
         return new Block(nextIndex, block.hash, nextTimestamp, blockData, nextHash);
     };
 
     //Хранение блоков
     public Block getGenesisBlock(){
-        return new Block(0, "0", new Date(), "Главный блок", "c5541a4decd096682d13f4ea9c77b94320dec0e331f4d31564166a23529a27bd");
+        return new Block(0, "0", getToday(), "Главный блок", "c5541a4decd096682d13f4ea9c77b94320dec0e331f4d31564166a23529a27bd");
     };
 
     //Подтверждение целостности блоков
