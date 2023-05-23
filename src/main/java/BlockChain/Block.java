@@ -91,13 +91,13 @@ class Block  {
     //Подтверждение целостности блоков
     public boolean isValidNewBlock (Block newBlock, Block previousBlock) throws NoSuchAlgorithmException {
         if (previousBlock.index + 1 != newBlock.index) {
-            System.out.println("неверный индекс");
+            System.out.println("\nНеверный индекс");
             return false;
         } else if (!previousBlock.hash.equals(newBlock.previousHash)) {
-            System.out.println("неверный хеш предыдущего блока");
+            System.out.println("\nНеверный хеш предыдущего блока");
             return false;
         } else if (!calculateHash(newBlock.index,newBlock.previousHash,newBlock.timestamp,newBlock.data).equals(newBlock.hash)) {
-            System.out.println("неверный хеш: " + calculateHash(newBlock.index,newBlock.previousHash,newBlock.timestamp,newBlock.data) + ' ' + newBlock.hash);
+            System.out.println("\nНеверный хеш: " + calculateHash(newBlock.index,newBlock.previousHash,newBlock.timestamp,newBlock.data) + ' ' + newBlock.hash);
             return false;
         }
         return true;
