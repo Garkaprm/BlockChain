@@ -60,12 +60,6 @@ class Block  {
         this.hash = hash;
     }
 
-    /*//Хеш блока
-    public String calculateHashOld (String index, String previousHash, Date timestamp, String data) {
-        String temp = index + previousHash + timestamp + data;
-        return temp;
-    };*/
-
     //Хеш блока
     public String calculateHash (int index, String previousHash, String timestamp, String data) throws NoSuchAlgorithmException {
         String str = index + previousHash + timestamp + data;
