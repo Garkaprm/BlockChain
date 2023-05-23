@@ -1,13 +1,16 @@
 package BlockChain;
 
 import java.security.NoSuchAlgorithmException;
-import java.sql.Date;
 
 public class Main {
     public static void main(String[] args) throws NoSuchAlgorithmException {
-        Date dt = new Date(2023,4,23);
-        Block test = new Block(1234, "qwer123rew", dt, "testFirst", "987tre9");
-        System.out.println(test.calculateHash(test.getHash(),test.getPreviousHash(),test.getTimestamp(),test.getData()));
+        Block block = new Block();
+        Block first = block.getGenesisBlock();
+        System.out.println(first);
+        Block second = block.generateNextBlock(first, "Второй тестовый блок");
+        if (block.isValidNewBlock(second,first)) {
+            System.out.println(second);
+        }
     }
 }
 
